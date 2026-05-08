@@ -32,12 +32,12 @@ prepare() {
   cargo fetch --locked --target "$CARCH-unknown-linux-gnu"
 
   # Arch ships libdisplay-info 0.3.x, while libdisplay-info-sys 0.2.x
-  # hard-codes an upper bound (< 0.3.0) in build.rs. Relax this bound
-  # for distro builds so pkg-config can resolve the installed system lib.
-  local libdisplay_build_rs
-  while IFS= read -r libdisplay_build_rs; do
-    sed -i "s/libdisplay-info < 0.3.0/libdisplay-info < 0.4.0/g" "${libdisplay_build_rs}"
-  done < <(find "${CARGO_HOME}/registry/src" -type f -path "*/libdisplay-info-sys-*/build.rs")
+  # encodes an upper bound (< 0.3.0) in crate metadata used by pkg-config.
+  # Relax this bound for distro builds so pkg-config can resolve Arch rolling.
+  local libdisplay_file
+  while IFS= read -r libdisplay_file; do
+    sed -i "s/libdisplay-info < 0.3.0/libdisplay-info < 0.4.0/g" "${libdisplay_file}"
+  done < <(find "${CARGO_HOME}/registry/src" -type f \( -path "*/libdisplay-info-sys-*/Cargo.toml" -o -path "*/libdisplay-info-sys-*/build.rs" \))
 }
 
 build() {
