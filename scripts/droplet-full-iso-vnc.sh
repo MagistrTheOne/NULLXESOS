@@ -40,7 +40,7 @@ sed -i "s/smithay-drm-extras = \"0.2\"/smithay-drm-extras = \"0.1\"/" Cargo.toml
 find packaging/pkgbuilds iso/calamares \
   \( -name src -o -name pkg \) -type d -prune -exec rm -rf {} +
 find packaging/pkgbuilds iso/calamares \
-  \( -name "source.tar.zst" -o -name "*.pkg.tar.zst" -o -name "*.pkg.tar.zst.sig" \) \
+  \( -name "source.tar.zst" -o -name "nullxes-*.tar.zst" -o -name "calamares-config-nullxes-*.tar.zst" -o -name "*.pkg.tar.zst" -o -name "*.pkg.tar.zst.sig" \) \
   -type f -delete
 
 mkdir -p /srv/nullxes-repo/x86_64
@@ -59,7 +59,7 @@ build_with_source_tar() {
   local dir="$1"
   local pkgname="$2"
   local pkgver="$3"
-  su - builder -c "bash -lc '\''set -euo pipefail; rm -f \"$dir/source.tar.zst\"; cd /work; tar --use-compress-program=zstd -caf \"$dir/source.tar.zst\" \
+  su - builder -c "bash -lc '\''set -euo pipefail; rm -f \"$dir/source.tar.zst\" \"$dir/${pkgname}-${pkgver}.tar.zst\"; cd /work; tar --use-compress-program=zstd -caf \"$dir/source.tar.zst\" \
     --exclude=\"packaging/pkgbuilds/*/pkg\" \
     --exclude=\"packaging/pkgbuilds/*/src\" \
     --exclude=\"packaging/pkgbuilds/*/*.pkg.tar.zst\" \
