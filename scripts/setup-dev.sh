@@ -39,7 +39,7 @@ install_arch() {
         libinput \
         systemd \
         mesa \
-        libseat \
+        seatd \
         libx11 \
         libxcb \
         clang \

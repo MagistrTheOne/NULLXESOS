@@ -18,7 +18,7 @@ jobs:
           pacman -S --noconfirm --needed \
             base-devel rust pkgconf git \
             libxkbcommon wayland wayland-protocols \
-            libinput libseat libdrm mesa libgbm \
+            libinput seatd libdrm mesa libgbm \
             pipewire dbus pam fontconfig
       - uses: actions/checkout@v4
 

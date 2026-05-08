@@ -8,12 +8,12 @@ url='https://github.com/nullxes/vendeta'
 license=('MIT')
 depends=(
   'glibc' 'gcc-libs' 'libinput' 'libxkbcommon' 'wayland'
-  'mesa' 'systemd-libs' 'libseat' 'libudev0-shim'
+  'mesa' 'systemd-libs' 'seatd'
   'pixman' 'cairo' 'pango'
 )
 makedepends=(
   'rust' 'cargo' 'pkgconf' 'clang' 'wayland-protocols'
-  'pipewire' 'libinput' 'libxkbcommon' 'libseat' 'libdrm' 'mesa'
+  'pipewire' 'libinput' 'libxkbcommon' 'seatd' 'libdrm' 'mesa'
 )
 optdepends=(
   'xorg-xwayland: legacy X11 application support'
