@@ -34,12 +34,12 @@ build() {
   export RUSTFLAGS="-C codegen-units=1 -C debuginfo=0"
   export SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:-$(date +%s)}"
   cd "${srcdir}/${pkgname}-${pkgver}"
-  cargo build --release --frozen --bin frame
+  cargo build --release --locked --bin frame
 }
 
 check() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  cargo test --release --frozen --bin frame -- --nocapture
+  cargo test --release --locked --bin frame -- --nocapture
 }
 
 package() {

@@ -14,7 +14,7 @@ b2sums=('SKIP')
 build() {
   export CARGO_HOME="${srcdir}/cargo-home"
   cd "${srcdir}/${pkgname}-${pkgver}"
-  cargo build --release --frozen --features cli --bin theme-export
+  cargo build --release --locked --features cli --bin theme-export
 }
 
 package() {
