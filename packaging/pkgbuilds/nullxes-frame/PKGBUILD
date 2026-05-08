@@ -30,6 +30,15 @@ prepare() {
   export CARGO_HOME="${srcdir}/cargo-home"
   cd "${srcdir}/${pkgname}-${pkgver}"
   cargo fetch --locked --target "$CARCH-unknown-linux-gnu"
+
+  # Arch ships libdisplay-info 0.3.x, while libdisplay-info-sys 0.2.x
+  # hard-codes an upper bound (< 0.3.0) in build.rs. Relax this bound
+  # for distro builds so pkg-config can resolve the installed system lib.
+  local libdisplay_build_rs
+  libdisplay_build_rs="$(echo "${CARGO_HOME}"/registry/src/*/libdisplay-info-sys-0.2.2/build.rs)"
+  if [[ -f "${libdisplay_build_rs}" ]]; then
+    sed -i "s/libdisplay-info < 0.3.0/libdisplay-info < 0.4.0/" "${libdisplay_build_rs}"
+  fi
 }
 
 build() {
