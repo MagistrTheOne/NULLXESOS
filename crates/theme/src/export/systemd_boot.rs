@@ -5,7 +5,7 @@ use std::io::Cursor;
 use std::path::Path;
 
 use anyhow::Context;
-use image::{ImageBuffer, ImageOutputFormat, Rgba, RgbaImage};
+use image::{ImageBuffer, ImageFormat, Rgba, RgbaImage};
 
 use crate::{color::*, Color, Theme};
 
@@ -14,7 +14,7 @@ pub fn generate(theme: &Theme, out_dir: &Path) -> anyhow::Result<()> {
     let img = render(theme.accent());
     let mut buf: Vec<u8> = Vec::new();
     let mut cursor = Cursor::new(&mut buf);
-    img.write_to(&mut cursor, ImageOutputFormat::Bmp)?;
+    img.write_to(&mut cursor, ImageFormat::Bmp)?;
     std::fs::write(out_dir.join("splash.bmp"), buf)?;
     Ok(())
 }
