@@ -58,6 +58,15 @@ sudo -u builder -- bash -lc "cd /work && cargo generate-lockfile"
 
 build_pkgbuild() {
   local dir="$1"
+  if [[ "$dir" == "/work/packaging/pkgbuilds/nullxes-frame" ]]; then
+    # Arch rolling ships libdisplay-info 0.3.x. The older libdisplay-info-sys
+    # used through smithay-drm-extras may still enforce "< 0.3.0". Patch it in
+    # the extracted source tree before build to keep frame packaging working.
+    sudo -u builder -- bash -lc "set -euo pipefail; cd \"$dir\"; \
+      if [[ -d src ]]; then \
+        find src -type f -path \"*/libdisplay-info-sys-*/build.rs\" -exec sed -i \"s/libdisplay-info < 0.3.0/libdisplay-info < 0.4.0/g\" {} +; \
+      fi"
+  fi
   sudo -u builder -- bash -lc "set -euo pipefail; cd \"$dir\"; rm -f ./*.pkg.tar.zst ./*.pkg.tar.zst.sig; makepkg --syncdeps --noconfirm --skippgpcheck --clean --cleanbuild --nodeps"
   cp -f "$dir"/*.pkg.tar.zst /srv/nullxes-repo/x86_64/
 }
