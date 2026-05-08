@@ -50,7 +50,7 @@ build_with_source_tar() {
   local dir="$1"
   local pkgname="$2"
   local pkgver="$3"
-  su - builder -c "bash -lc '\''set -euo pipefail; cd \"$dir\"; rm -f source.tar.zst; tar --use-compress-program=zstd -caf source.tar.zst --transform \"s,^,${pkgname}-${pkgver}/,\" crates Cargo.toml packaging config scripts sessions iso'\''"
+  su - builder -c "bash -lc '\''set -euo pipefail; rm -f \"$dir/source.tar.zst\"; cd /work; tar --use-compress-program=zstd -caf \"$dir/source.tar.zst\" --transform \"s,^,${pkgname}-${pkgver}/,\" crates Cargo.toml packaging config scripts sessions iso'\''"
   build_pkgbuild "$dir"
 }
 
