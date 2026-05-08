@@ -64,7 +64,7 @@ smithay = { version = "0.6", features = [
     "xwayland",
     "use_system_lib",
 ] }
-smithay-drm-extras = "0.2"
+smithay-drm-extras = "0.1"
 
 # ── Wayland client ───────────────────────────────────────────────────────────
 wayland-client        = "0.31"
