@@ -14,8 +14,12 @@ b2sums=('SKIP' 'SKIP')
 
 package() {
   install -d "${pkgdir}/usr/share/fonts/nullxes"
-  cp -p "${srcdir}"/Inter-4.0/extras/ttf/Inter-Variable.ttf       "${pkgdir}/usr/share/fonts/nullxes/" || true
-  cp -p "${srcdir}"/Inter-4.0/extras/ttf/Inter-Regular.ttf        "${pkgdir}/usr/share/fonts/nullxes/" || true
-  cp -p "${srcdir}"/Inter-4.0/extras/ttf/Inter-Medium.ttf         "${pkgdir}/usr/share/fonts/nullxes/" || true
-  cp -p "${srcdir}"/JetBrainsMono-2.304/fonts/ttf/*.ttf           "${pkgdir}/usr/share/fonts/nullxes/" || true
+
+  # Upstream archive layouts can change between releases; copy all TTFs found.
+  shopt -s nullglob globstar
+  local font
+  for font in "${srcdir}"/Inter-4.0/**/*.ttf "${srcdir}"/JetBrainsMono-2.304/**/*.ttf; do
+    cp -p "${font}" "${pkgdir}/usr/share/fonts/nullxes/"
+  done
+  shopt -u nullglob globstar
 }

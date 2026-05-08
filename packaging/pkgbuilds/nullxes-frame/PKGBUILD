@@ -13,7 +13,7 @@ depends=(
 )
 makedepends=(
   'rust' 'cargo' 'pkgconf' 'clang' 'wayland-protocols'
-  'pipewire' 'libinput' 'libxkbcommon' 'seatd' 'libdrm' 'mesa'
+  'pipewire' 'libinput' 'libxkbcommon' 'seatd' 'libdrm' 'mesa' 'libdisplay-info'
 )
 optdepends=(
   'xorg-xwayland: legacy X11 application support'
