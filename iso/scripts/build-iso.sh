@@ -23,6 +23,10 @@ if [[ -z "${SOURCE_DATE_EPOCH:-}" ]]; then
 fi
 
 mkdir -p "$WORK_DIR" "$OUT_DIR"
-sudo mkarchiso -v -w "$WORK_DIR" -o "$OUT_DIR" "$PROFILE"
+if command -v sudo >/dev/null 2>&1 && [[ "${EUID:-$(id -u)}" -ne 0 ]]; then
+    sudo mkarchiso -v -w "$WORK_DIR" -o "$OUT_DIR" "$PROFILE"
+else
+    mkarchiso -v -w "$WORK_DIR" -o "$OUT_DIR" "$PROFILE"
+fi
 
 ls -lh "$OUT_DIR"

@@ -16,7 +16,7 @@ jobs:
         run: |
           pacman -Syu --noconfirm
           pacman -S --noconfirm --needed \
-            base-devel rust cargo pkgconf git \
+            base-devel rust pkgconf git \
             libxkbcommon wayland wayland-protocols \
             libinput libseat libdrm mesa libgbm \
             pipewire dbus pam fontconfig
@@ -58,7 +58,7 @@ jobs:
         run: |
           pacman -Syu --noconfirm
           pacman -S --noconfirm --needed \
-            base-devel rust cargo git archiso edk2-ovmf \
+            base-devel rust git archiso edk2-ovmf \
             qemu-system-x86 expect
 
       - uses: actions/checkout@v4

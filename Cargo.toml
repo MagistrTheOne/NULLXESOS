@@ -108,7 +108,7 @@ freedesktop-desktop-entry = "0.5"
 shlex                     = "1"
 
 # ── Misc ─────────────────────────────────────────────────────────────────────
-dirs-next = "0.1"
+dirs-next = "2"
 calloop   = { version = "0.13", features = ["executor"] }
 fastrand  = "2"
 once_cell = "1"

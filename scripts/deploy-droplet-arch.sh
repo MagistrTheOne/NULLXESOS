@@ -39,7 +39,7 @@ cd "${REPO_DIR}"
 echo "[nullxes] syncing packages..."
 pacman -Syu --noconfirm
 pacman -S --noconfirm --needed \
-    base-devel git rust cargo pkgconf clang curl \
+    base-devel git rust pkgconf clang curl \
     wayland wayland-protocols libxkbcommon \
     libinput libseat libdrm mesa libgbm \
     pipewire wireplumber dbus pam fontconfig \
