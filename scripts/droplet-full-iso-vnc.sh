@@ -31,7 +31,8 @@ pacman -Syu --noconfirm
 pacman -S --noconfirm --needed \
   base-devel git rust archiso qemu-system-x86 edk2-ovmf expect sudo zstd \
   pkgconf clang wayland wayland-protocols libxkbcommon libinput seatd \
-  libdrm mesa pipewire pipewire-pulse wireplumber pam fontconfig systemd-libs
+  libdrm mesa pipewire pipewire-pulse wireplumber pam fontconfig systemd-libs \
+  libdisplay-info
 
 # Build scripts in this repo expect unsigned local repo during development.
 sed -i "s/SigLevel = Required DatabaseRequired/SigLevel = Optional TrustAll/" iso/profile/pacman.conf

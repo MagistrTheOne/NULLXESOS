@@ -35,10 +35,9 @@ prepare() {
   # hard-codes an upper bound (< 0.3.0) in build.rs. Relax this bound
   # for distro builds so pkg-config can resolve the installed system lib.
   local libdisplay_build_rs
-  libdisplay_build_rs="$(echo "${CARGO_HOME}"/registry/src/*/libdisplay-info-sys-0.2.2/build.rs)"
-  if [[ -f "${libdisplay_build_rs}" ]]; then
-    sed -i "s/libdisplay-info < 0.3.0/libdisplay-info < 0.4.0/" "${libdisplay_build_rs}"
-  fi
+  while IFS= read -r libdisplay_build_rs; do
+    sed -i "s/libdisplay-info < 0.3.0/libdisplay-info < 0.4.0/g" "${libdisplay_build_rs}"
+  done < <(find "${CARGO_HOME}/registry/src" -type f -path "*/libdisplay-info-sys-*/build.rs")
 }
 
 build() {

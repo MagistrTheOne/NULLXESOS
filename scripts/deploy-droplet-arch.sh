@@ -41,7 +41,7 @@ pacman -Syu --noconfirm
 pacman -S --noconfirm --needed \
     base-devel git rust pkgconf clang curl \
     wayland wayland-protocols libxkbcommon \
-    libinput seatd libdrm mesa libgbm \
+    libinput seatd libdrm mesa libgbm libdisplay-info \
     pipewire wireplumber dbus pam fontconfig \
     archiso qemu-system-x86 edk2-ovmf expect
 
