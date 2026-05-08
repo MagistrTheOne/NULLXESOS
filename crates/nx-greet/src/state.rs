@@ -1,6 +1,7 @@
 //! NX-GREET wayland state.
 
 use anyhow::{Context, Result};
+use std::sync::Arc;
 use wayland_client::{
     globals::{registry_queue_init, GlobalListContents},
     protocol::{
@@ -40,6 +41,7 @@ pub struct GreetState {
     keymap:     KeyboardState,
     buffer:     Option<ShmDoubleBuffer<GreetState>>,
     text:       Option<theme::text::TextRenderer>,
+    background: Option<Arc<render::BackgroundImage>>,
     width:      u32,
     height:     u32,
     configured: bool,
@@ -66,6 +68,7 @@ impl GreetState {
             keymap: KeyboardState::new(),
             buffer: None,
             text: wlcommon::load_default_text_renderer(),
+            background: render::load_background_image().map(Arc::new),
             width: render::W,
             height: render::H,
             configured: false,
@@ -110,8 +113,10 @@ impl GreetState {
         let error = self.error.clone();
         let focus = self.focus;
         let pending = self.pending;
+        let background = self.background.clone();
         let drawn = match pool.draw(|pixels, stride, w, h| {
             render::paint(pixels, stride, w, h, text_taken.as_mut(),
+                background.as_deref(),
                 &username, password_len, prompt.as_deref(), error.as_deref(),
                 focus, pending);
         }) {

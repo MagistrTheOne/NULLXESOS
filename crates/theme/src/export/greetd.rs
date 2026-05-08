@@ -9,7 +9,8 @@ pub fn generate(_theme: &crate::Theme, out_dir: &Path) -> anyhow::Result<()> {
     // Stage 1 ships only an env file the NX-GREET reads at startup; assets
     // are derived at runtime from the theme tokens.
     let env = "# NULLXES NX-GREET configuration (read by /usr/bin/nullxes-greet)\n\
-                # Reserved for future per-host overrides (background image, etc.).\n";
+                # Optional startup wallpaper for greeter:\n\
+                # NULLXES_GREET_BACKGROUND=/usr/share/nullxes/backgrounds/default.png\n";
     std::fs::write(out_dir.join("greet.env"), env.as_bytes())?;
     Ok(())
 }

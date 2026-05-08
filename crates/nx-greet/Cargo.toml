@@ -27,6 +27,7 @@ wayland-protocols  = { workspace = true }
 
 xkbcommon          = { workspace = true }
 greetd_ipc         = { workspace = true }
+image              = { workspace = true }
 
 [lints]
 workspace = true
