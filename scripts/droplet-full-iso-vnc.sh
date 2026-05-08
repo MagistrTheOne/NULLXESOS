@@ -33,14 +33,14 @@ pacman -S --noconfirm --needed \
 
 # Build scripts in this repo expect unsigned local repo during development.
 sed -i "s/SigLevel = Required DatabaseRequired/SigLevel = Optional TrustAll/" iso/profile/pacman.conf
-sed -i "s/smithay-drm-extras = \"0.2\"/smithay-drm-extras = \"0.1\"/" Cargo.toml
+find . -name "Cargo.toml" -exec sed -i "s/smithay-drm-extras = \"0.2\"/smithay-drm-extras = \"0.1\"/" {} +
 
 # Drop stale package build trees from previous failed attempts. makepkg can
 # otherwise reuse an old extracted source tree even after git pull.
 find packaging/pkgbuilds iso/calamares \
   \( -name src -o -name pkg \) -type d -prune -exec rm -rf {} +
 find packaging/pkgbuilds iso/calamares \
-  \( -name "source.tar.zst" -o -name "*.pkg.tar.zst" -o -name "*.pkg.tar.zst.sig" \) \
+  \( -name "source.tar.zst" -o -name "nullxes-*.tar.zst" -o -name "calamares-config-nullxes-*.tar.zst" -o -name "*.pkg.tar.zst" -o -name "*.pkg.tar.zst.sig" \) \
   -type f -delete
 
 mkdir -p /srv/nullxes-repo/x86_64
@@ -49,13 +49,13 @@ repo-add /srv/nullxes-repo/x86_64/nullxes.db.tar.gz || true
 id -u builder >/dev/null 2>&1 || useradd -m builder
 chown -R builder:builder /work /srv/nullxes-repo
 
-# The development repo may be checked out without Cargo.lock. Generate it once
-# inside the Arch build environment so PKGBUILDs can keep using --locked.
-su - builder -c "bash -lc 'set -euo pipefail; cd /work; cargo generate-lockfile'"
+# The repo may be checked out without Cargo.lock. Generate it in the Arch
+# build environment, then include it in every source archive.
+sudo -u builder -- bash -lc "cd /work && cargo generate-lockfile"
 
 build_pkgbuild() {
   local dir="$1"
-  su - builder -c "bash -lc '\''set -euo pipefail; cd \"$dir\"; rm -f ./*.pkg.tar.zst ./*.pkg.tar.zst.sig; makepkg --syncdeps --noconfirm --skippgpcheck --clean --cleanbuild --nodeps'\''"
+  sudo -u builder -- bash -lc "set -euo pipefail; cd \"$dir\"; rm -f ./*.pkg.tar.zst ./*.pkg.tar.zst.sig; makepkg --syncdeps --noconfirm --skippgpcheck --clean --cleanbuild --nodeps"
   cp -f "$dir"/*.pkg.tar.zst /srv/nullxes-repo/x86_64/
 }
 
@@ -63,19 +63,19 @@ build_with_source_tar() {
   local dir="$1"
   local pkgname="$2"
   local pkgver="$3"
-  su - builder -c "bash -lc '\''set -euo pipefail; rm -f \"$dir/source.tar.zst\"; cd /work; tar --use-compress-program=zstd -caf \"$dir/source.tar.zst\" \
+  sudo -u builder -- bash -lc "set -euo pipefail; rm -f \"$dir/source.tar.zst\" \"$dir/${pkgname}-${pkgver}.tar.zst\"; cd /work; tar --use-compress-program=zstd -caf \"$dir/source.tar.zst\" \
     --exclude=\"packaging/pkgbuilds/*/pkg\" \
     --exclude=\"packaging/pkgbuilds/*/src\" \
     --exclude=\"packaging/pkgbuilds/*/*.pkg.tar.zst\" \
     --exclude=\"packaging/pkgbuilds/*/*.pkg.tar.zst.sig\" \
     --exclude=\"packaging/pkgbuilds/*/source.tar.zst\" \
-    --transform \"s,^,${pkgname}-${pkgver}/,\" crates Cargo.toml Cargo.lock packaging config scripts sessions iso'\''"
+    --transform \"s,^,${pkgname}-${pkgver}/,\" crates Cargo.toml Cargo.lock packaging config scripts sessions iso"
   build_pkgbuild "$dir"
 }
 
 build_calamares_cfg() {
   local dir="/work/iso/calamares"
-  su - builder -c "bash -lc '\''set -euo pipefail; cd \"$dir\"; rm -f source.tar.zst; tar --use-compress-program=zstd -caf source.tar.zst settings.conf branding modules'\''"
+  sudo -u builder -- bash -lc "set -euo pipefail; cd \"$dir\"; rm -f source.tar.zst calamares-config-nullxes-*.tar.zst; tar --use-compress-program=zstd -caf source.tar.zst settings.conf branding modules"
   build_pkgbuild "$dir"
 }
 
