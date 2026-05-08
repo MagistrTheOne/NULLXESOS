@@ -14,6 +14,7 @@ set -euo pipefail
 REPO_DIR="${REPO_DIR:-/opt/NULLXESOS}"
 VNC_PORT="${VNC_PORT:-5901}"
 SKIP_BOOT="${SKIP_BOOT:-0}"
+ARCH_ARCHIVE_DATE="${ARCH_ARCHIVE_DATE:-2026/05/08}"
 
 if [[ ! -d "${REPO_DIR}" ]]; then
     echo "[nullxes] repo dir not found: ${REPO_DIR}" >&2
@@ -27,6 +28,10 @@ docker run --rm -it --privileged -p "${VNC_PORT}:5901" \
   bash -lc '
 set -euo pipefail
 
+cat >/etc/pacman.d/mirrorlist <<EOF
+Server = https://archive.archlinux.org/repos/'"${ARCH_ARCHIVE_DATE}"'/\$repo/os/\$arch
+EOF
+
 pacman -Syu --noconfirm
 pacman -S --noconfirm --needed \
   base-devel git rust archiso qemu-system-x86 edk2-ovmf expect sudo zstd \
@@ -36,7 +41,6 @@ pacman -S --noconfirm --needed \
 
 # Build scripts in this repo expect unsigned local repo during development.
 sed -i "s/SigLevel = Required DatabaseRequired/SigLevel = Optional TrustAll/" iso/profile/pacman.conf
-find . -name "Cargo.toml" -exec sed -i "s/smithay-drm-extras = \"0.2\"/smithay-drm-extras = \"0.1\"/" {} +
 
 # Drop stale package build trees from previous failed attempts. makepkg can
 # otherwise reuse an old extracted source tree even after git pull.
@@ -54,7 +58,7 @@ chown -R builder:builder /work /srv/nullxes-repo
 
 # The repo may be checked out without Cargo.lock. Generate it in the Arch
 # build environment, then include it in every source archive.
-sudo -u builder -- bash -lc "cd /work && cargo generate-lockfile"
+sudo -u builder -- bash -lc "cd /work && cargo generate-lockfile && cargo update -p libdisplay-info-sys && cargo update -p libdisplay-info"
 
 build_pkgbuild() {
   local dir="$1"

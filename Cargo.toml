@@ -114,6 +114,10 @@ fastrand  = "2"
 once_cell = "1"
 parking_lot = "0.12"
 
+[patch.crates-io]
+libdisplay-info = { git = "https://github.com/Smithay/libdisplay-info-rs", rev = "6a05eb0b56b5e9d4072479cb14c6cdbd5a83ebe6" }
+libdisplay-info-sys = { git = "https://github.com/Smithay/libdisplay-info-rs", rev = "6a05eb0b56b5e9d4072479cb14c6cdbd5a83ebe6" }
+
 # ── Workspace lints (applied by each crate via `[lints.workspace = true]`) ──
 [workspace.lints.clippy]
 unwrap_used  = "deny"

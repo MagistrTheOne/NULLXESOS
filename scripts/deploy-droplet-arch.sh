@@ -27,6 +27,7 @@ fi
 
 REPO_DIR="${REPO_DIR:-/opt/NULLXESOS}"
 SKIP_SMOKE="${SKIP_SMOKE:-0}"
+ARCH_ARCHIVE_DATE="${ARCH_ARCHIVE_DATE:-2026/05/08}"
 
 if [[ ! -d "${REPO_DIR}" ]]; then
     echo "[nullxes] repo dir not found: ${REPO_DIR}" >&2
@@ -37,6 +38,9 @@ fi
 cd "${REPO_DIR}"
 
 echo "[nullxes] syncing packages..."
+cat >/etc/pacman.d/mirrorlist <<EOF
+Server = https://archive.archlinux.org/repos/${ARCH_ARCHIVE_DATE}/\$repo/os/\$arch
+EOF
 pacman -Syu --noconfirm
 pacman -S --noconfirm --needed \
     base-devel git rust pkgconf clang curl \
@@ -56,6 +60,11 @@ if [[ -z "${SOURCE_DATE_EPOCH:-}" ]]; then
     export SOURCE_DATE_EPOCH
 fi
 echo "[nullxes] SOURCE_DATE_EPOCH=${SOURCE_DATE_EPOCH}"
+
+echo "[nullxes] refreshing Cargo.lock..."
+cargo generate-lockfile
+cargo update -p libdisplay-info-sys
+cargo update -p libdisplay-info
 
 echo "[nullxes] building Rust workspace..."
 cargo build --workspace --release --locked
