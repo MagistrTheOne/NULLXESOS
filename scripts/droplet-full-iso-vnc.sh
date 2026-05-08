@@ -33,6 +33,15 @@ pacman -S --noconfirm --needed \
 
 # Build scripts in this repo expect unsigned local repo during development.
 sed -i "s/SigLevel = Required DatabaseRequired/SigLevel = Optional TrustAll/" iso/profile/pacman.conf
+sed -i "s/smithay-drm-extras = \"0.2\"/smithay-drm-extras = \"0.1\"/" Cargo.toml
+
+# Drop stale package build trees from previous failed attempts. makepkg can
+# otherwise reuse an old extracted source tree even after git pull.
+find packaging/pkgbuilds iso/calamares \
+  \( -name src -o -name pkg \) -type d -prune -exec rm -rf {} +
+find packaging/pkgbuilds iso/calamares \
+  \( -name "source.tar.zst" -o -name "*.pkg.tar.zst" -o -name "*.pkg.tar.zst.sig" \) \
+  -type f -delete
 
 mkdir -p /srv/nullxes-repo/x86_64
 repo-add /srv/nullxes-repo/x86_64/nullxes.db.tar.gz || true
