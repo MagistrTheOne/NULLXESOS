@@ -29,7 +29,9 @@ set -euo pipefail
 
 pacman -Syu --noconfirm
 pacman -S --noconfirm --needed \
-  base-devel git rust archiso qemu-system-x86 edk2-ovmf expect sudo zstd
+  base-devel git rust archiso qemu-system-x86 edk2-ovmf expect sudo zstd \
+  pkgconf clang wayland wayland-protocols libxkbcommon libinput libseat \
+  libdrm mesa pipewire pipewire-pulse wireplumber pam fontconfig systemd-libs
 
 # Build scripts in this repo expect unsigned local repo during development.
 sed -i "s/SigLevel = Required DatabaseRequired/SigLevel = Optional TrustAll/" iso/profile/pacman.conf

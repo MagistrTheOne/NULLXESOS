@@ -11,7 +11,10 @@ depends=(
   'mesa' 'systemd-libs' 'libseat' 'libudev0-shim'
   'pixman' 'cairo' 'pango'
 )
-makedepends=('rust' 'cargo' 'pkgconf' 'wayland-protocols')
+makedepends=(
+  'rust' 'cargo' 'pkgconf' 'clang' 'wayland-protocols'
+  'pipewire' 'libinput' 'libxkbcommon' 'libseat' 'libdrm' 'mesa'
+)
 optdepends=(
   'xorg-xwayland: legacy X11 application support'
   'pipewire: audio backend'
