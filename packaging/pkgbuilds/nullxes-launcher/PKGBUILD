@@ -1,0 +1,30 @@
+pkgname=nullxes-launcher
+pkgver=0.1.0
+pkgrel=1
+pkgdesc='NULLXES OS application launcher (wlr-layer-shell)'
+arch=('x86_64')
+url='https://github.com/nullxes/vendeta'
+license=('MIT')
+depends=('glibc' 'wayland' 'libxkbcommon' 'nullxes-fonts')
+makedepends=('rust' 'cargo' 'pkgconf' 'wayland-protocols')
+options=('!debug' '!lto')
+source=("nullxes-launcher-${pkgver}.tar.zst::file://${PWD}/source.tar.zst")
+b2sums=('SKIP')
+
+prepare() {
+  export CARGO_HOME="${srcdir}/cargo-home"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  cargo fetch --locked
+}
+
+build() {
+  export CARGO_HOME="${srcdir}/cargo-home"
+  export RUSTFLAGS="-C codegen-units=1 -C debuginfo=0"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  cargo build --release --frozen --bin nullxes-launcher
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  install -Dm755 target/release/nullxes-launcher "${pkgdir}/usr/bin/nullxes-launcher"
+}

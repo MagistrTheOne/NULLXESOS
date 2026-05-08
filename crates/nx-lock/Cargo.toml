@@ -1,0 +1,33 @@
+[package]
+name        = "nx-lock"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "NX-LOCK — NULLXES session-lock client (ext-session-lock-v1 + PAM)."
+
+[[bin]]
+name = "nullxes-lock"
+path = "src/main.rs"
+
+[dependencies]
+theme       = { workspace = true, features = ["render"] }
+wlcommon    = { workspace = true }
+serde       = { workspace = true }
+toml        = { workspace = true }
+anyhow      = { workspace = true }
+thiserror   = { workspace = true }
+tracing     = { workspace = true }
+tracing-subscriber = { workspace = true }
+dirs-next   = { workspace = true }
+libc        = { workspace = true }
+nix         = { workspace = true }
+parking_lot = { workspace = true }
+
+wayland-client     = { workspace = true }
+wayland-protocols  = { workspace = true }
+
+xkbcommon = { workspace = true }
+pam       = { workspace = true }
+
+[lints]
+workspace = true

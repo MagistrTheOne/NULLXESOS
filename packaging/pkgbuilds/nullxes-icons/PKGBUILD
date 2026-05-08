@@ -1,0 +1,21 @@
+pkgname=nullxes-icons
+pkgver=0.1.0
+pkgrel=1
+pkgdesc='NULLXES OS icon theme (inherits Adwaita, custom accents)'
+arch=('any')
+url='https://github.com/nullxes/vendeta'
+license=('MIT')
+depends=('adwaita-icon-theme')
+
+package() {
+  install -Dm644 /dev/stdin "${pkgdir}/usr/share/icons/NULLXES/index.theme" <<'EOF'
+[Icon Theme]
+Name=NULLXES
+Comment=NULLXES system icon theme
+Inherits=Adwaita,hicolor
+Directories=
+EOF
+}
+
+post_install() { gtk-update-icon-cache -q -t -f /usr/share/icons/NULLXES 2>/dev/null || true; }
+post_upgrade() { post_install; }

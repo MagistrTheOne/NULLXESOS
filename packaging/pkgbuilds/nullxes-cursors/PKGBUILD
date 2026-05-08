@@ -1,0 +1,19 @@
+pkgname=nullxes-cursors
+pkgver=0.1.0
+pkgrel=1
+pkgdesc='NULLXES OS cursor theme (Bibata Modern Classic recoloured for NULLXES accent)'
+arch=('any')
+url='https://github.com/nullxes/vendeta'
+license=('Apache-2.0')
+depends=()
+
+# We ship a tiny index.theme that inherits Bibata at runtime; the actual
+# bitmap recolouring runs as a post-install hook.
+package() {
+  install -Dm644 /dev/stdin "${pkgdir}/usr/share/icons/NULLXES-Cursors/index.theme" <<'EOF'
+[Icon Theme]
+Name=NULLXES-Cursors
+Comment=NULLXES system cursor theme
+Inherits=Bibata-Modern-Classic
+EOF
+}

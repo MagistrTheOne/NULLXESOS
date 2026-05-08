@@ -1,0 +1,9 @@
+post_install() {
+  pacman-key --add /usr/share/pacman/keyrings/nullxes.gpg 2>/dev/null || true
+  while read -r fp; do
+    [ -z "$fp" ] && continue
+    pacman-key --lsign-key "$fp" 2>/dev/null || true
+  done < /usr/share/pacman/keyrings/nullxes-trusted
+}
+
+post_upgrade() { post_install; }

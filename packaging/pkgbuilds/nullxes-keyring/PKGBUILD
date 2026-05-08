@@ -1,0 +1,24 @@
+pkgname=nullxes-keyring
+pkgver=0.1.0
+pkgrel=1
+pkgdesc='NULLXES OS pacman repo signing key + repo entry'
+arch=('any')
+url='https://github.com/nullxes/vendeta'
+license=('MIT')
+depends=('pacman')
+install=nullxes-keyring.install
+
+package() {
+  install -Dm644 /dev/stdin "${pkgdir}/usr/share/pacman/keyrings/nullxes.gpg" <<'EOF'
+# Replace this placeholder with the exported public block at release time:
+#   gpg --armor --export PACKAGER@nullxes.os > nullxes.gpg
+EOF
+  install -Dm644 /dev/stdin "${pkgdir}/usr/share/pacman/keyrings/nullxes-trusted" <<'EOF'
+# Trusted key fingerprints (one per line); replaced at release time.
+EOF
+  install -Dm644 /dev/stdin "${pkgdir}/etc/pacman.d/nullxes.repo" <<'EOF'
+[nullxes]
+Server = https://repo.nullxes.os/$arch
+SigLevel = Required DatabaseRequired
+EOF
+}

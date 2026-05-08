@@ -1,0 +1,12 @@
+# greetd config — installed at /etc/greetd/config.toml by `nullxes-greet` package.
+# Drop-in for production: NX-GREET runs unprivileged as user `greeter`.
+
+[terminal]
+vt = "next"
+
+[default_session]
+command = "/usr/bin/nullxes-greet"
+user    = "greeter"
+
+# Live-ISO override is provided as `/etc/greetd/config-autologin.toml` and the
+# archiso profile bind-mounts it over `config.toml`. See packaging/iso/.

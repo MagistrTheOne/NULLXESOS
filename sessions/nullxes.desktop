@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=NULLXES
+Comment=NULLXES OS Desktop Environment
+Exec=/usr/local/bin/nullxes-session
+TryExec=/usr/local/bin/nullxes-session
+Type=Application
+DesktopNames=nullxes

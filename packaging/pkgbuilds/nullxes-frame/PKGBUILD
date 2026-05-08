@@ -1,0 +1,94 @@
+# Maintainer: NULLXES Systems Engineering <packagers@nullxes.os>
+pkgname=nullxes-frame
+pkgver=0.1.0
+pkgrel=1
+pkgdesc='NULLXES OS Wayland compositor (FRAME)'
+arch=('x86_64')
+url='https://github.com/nullxes/vendeta'
+license=('MIT')
+depends=(
+  'glibc' 'gcc-libs' 'libinput' 'libxkbcommon' 'wayland'
+  'mesa' 'systemd-libs' 'libseat' 'libudev0-shim'
+  'pixman' 'cairo' 'pango'
+)
+makedepends=('rust' 'cargo' 'pkgconf' 'wayland-protocols')
+optdepends=(
+  'xorg-xwayland: legacy X11 application support'
+  'pipewire: audio backend'
+  'networkmanager: connection management'
+  'upower: battery indicator'
+)
+provides=('frame')
+options=('!debug' '!lto')
+source=("nullxes-frame-${pkgver}.tar.zst::file://${PWD}/source.tar.zst")
+b2sums=('SKIP')
+
+prepare() {
+  export CARGO_HOME="${srcdir}/cargo-home"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  cargo fetch --locked --target "$CARCH-unknown-linux-gnu"
+}
+
+build() {
+  export CARGO_HOME="${srcdir}/cargo-home"
+  export RUSTFLAGS="-C codegen-units=1 -C debuginfo=0"
+  export SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:-$(date +%s)}"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  cargo build --release --frozen --bin frame
+}
+
+check() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  cargo test --release --frozen --bin frame -- --nocapture
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  install -Dm755 target/release/frame "${pkgdir}/usr/bin/frame"
+
+  # Wayland session entry.
+  install -Dm644 packaging/sessions/nullxes.desktop \
+    "${pkgdir}/usr/share/wayland-sessions/nullxes.desktop"
+
+  # systemd user unit (activated by graphical-session.target).
+  install -Dm644 packaging/systemd/user/nullxes-frame.service \
+    "${pkgdir}/usr/lib/systemd/user/nullxes-frame.service"
+
+  # /etc skeleton.
+  install -Dm644 /dev/stdin "${pkgdir}/etc/nullxes/frame.toml" <<'TOML'
+# NULLXES FRAME runtime configuration.
+# Override by copying this file to ~/.config/nullxes/frame.toml.
+
+[compositor]
+xwayland = true
+target_fps = 0
+vrr = true
+lock_on_suspend = true
+
+[input]
+natural_scroll = true
+tap_to_click = true
+pointer_accel = 0.0
+repeat_delay = 400
+repeat_rate = 30
+xkb_layout = ""
+xkb_variant = ""
+xkb_options = ""
+
+[workspace]
+count = 9
+wrap = false
+
+[idle]
+dim_ms = 300000
+lock_ms = 600000
+suspend_ms = 1800000
+
+[keybindings]
+launcher_binary = "nullxes-launcher"
+lock_binary = "nullxes-lock"
+TOML
+
+  install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE" 2>/dev/null || true
+}

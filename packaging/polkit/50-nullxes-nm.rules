@@ -1,0 +1,8 @@
+// Allow members of the `network` group to manage NetworkManager connections
+// without an admin password prompt.
+polkit.addRule(function(action, subject) {
+    if (action.id.indexOf("org.freedesktop.NetworkManager.") === 0
+        && subject.isInGroup("network")) {
+        return polkit.Result.YES;
+    }
+});

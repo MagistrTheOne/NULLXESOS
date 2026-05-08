@@ -1,0 +1,27 @@
+// NULLXES Plymouth script — black background with a centred accent square that
+// tracks boot progress. Generated at install time by `theme-export plymouth`
+// from theme.toml; this file is the deterministic output committed for review.
+
+Window.SetBackgroundTopColor(0.039, 0.039, 0.039);
+Window.SetBackgroundBottomColor(0.039, 0.039, 0.039);
+
+logo.image  = Image("logo.png");
+logo.sprite = Sprite(logo.image);
+logo.sprite.SetX(Window.GetWidth()  / 2 - logo.image.GetWidth()  / 2);
+logo.sprite.SetY(Window.GetHeight() / 2 - logo.image.GetHeight() / 2);
+
+bar.width  = 220;
+bar.height = 2;
+bar.color  = ImageDraw(bar.width, bar.height, 0.75, 0.75, 0.75);
+bar.sprite = Sprite(bar.color);
+bar.sprite.SetX(Window.GetWidth()  / 2 - bar.width  / 2);
+bar.sprite.SetY(Window.GetHeight() / 2 + logo.image.GetHeight() / 2 + 24);
+
+fun progress_callback(duration, progress) {
+    pct = bar.color.Crop(0, 0, bar.width * progress, bar.height);
+    bar.sprite.SetImage(pct);
+}
+Plymouth.SetBootProgressFunction(progress_callback);
+
+fun message_callback(text) { /* swallowed */ }
+Plymouth.SetMessageFunction(message_callback);

@@ -1,0 +1,22 @@
+[build]
+# Use mold linker if available — dramatically faster link times in dev.
+# Install: sudo apt install mold  (Debian) / sudo pacman -S mold  (Arch)
+# Comment out if not installed.
+# rustflags = ["-C", "link-arg=-fuse-ld=mold"]
+
+[profile.dev]
+opt-level = 1          # minimal optimisation in dev — makes smithay more tolerable
+debug     = true
+split-debuginfo = "unpacked"
+
+[profile.release]
+opt-level       = 3
+lto             = "thin"
+codegen-units   = 1
+strip           = "debuginfo"
+panic           = "abort"
+
+[profile.release-debug]
+inherits = "release"
+debug    = true
+strip    = false

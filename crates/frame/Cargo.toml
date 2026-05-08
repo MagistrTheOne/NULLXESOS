@@ -1,0 +1,53 @@
+[package]
+name        = "frame"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "FRAME — NULLXES OS Wayland compositor (smithay 0.6, hybrid in-process panel)."
+
+[[bin]]
+name = "frame"
+path = "src/main.rs"
+
+[dependencies]
+theme       = { workspace = true, features = ["render"] }
+ipc         = { workspace = true }
+serde       = { workspace = true }
+serde_json  = { workspace = true }
+toml        = { workspace = true }
+anyhow      = { workspace = true }
+thiserror   = { workspace = true }
+tracing     = { workspace = true }
+tracing-subscriber = { workspace = true }
+tracing-journald   = { workspace = true }
+dirs-next   = { workspace = true }
+calloop     = { workspace = true }
+libc        = { workspace = true }
+nix         = { workspace = true }
+rustix      = { workspace = true }
+parking_lot = { workspace = true }
+once_cell   = { workspace = true }
+fastrand    = { workspace = true }
+
+smithay            = { workspace = true }
+smithay-drm-extras = { workspace = true }
+
+# Async runtime for the IPC server, D-Bus listeners (login1, UPower, NM),
+# and PipeWire integration. Held inside FRAME via a dedicated tokio Runtime
+# so the calloop main thread is never blocked.
+tokio        = { workspace = true }
+zbus         = { workspace = true }
+futures-util = { workspace = true }
+
+# Used by the in-process panel modules.
+pipewire = { workspace = true }
+
+[features]
+default = ["winit", "drm"]
+# Development backend: run inside an existing Wayland or X11 session.
+winit   = []
+# Production backend: bare-metal DRM/KMS via libseat + udev + libinput.
+drm     = []
+
+[lints]
+workspace = true

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Install NULLXES
+Exec=sh -c 'pkexec calamares'
+Type=Application
+Icon=system-software-install
+Categories=System;
+Terminal=false

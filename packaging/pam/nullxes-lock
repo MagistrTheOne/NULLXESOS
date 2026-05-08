@@ -1,0 +1,9 @@
+#%PAM-1.0
+# /etc/pam.d/nullxes-lock — PAM service for NX-LOCK.
+# Modeled after the Arch swaylock profile: only authenticates the calling user;
+# does not establish a fresh session.
+
+auth      include   system-auth
+account   include   system-auth
+password  include   system-auth
+session   include   system-auth

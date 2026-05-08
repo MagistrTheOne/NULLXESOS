@@ -1,0 +1,22 @@
+#!/usr/bin/env expect
+# smoke.expect — boot the live ISO under QEMU and verify greeter responds.
+# Used by the GitHub Actions ISO test job.
+set timeout 180
+set iso     [lindex $argv 0]
+set disk    [lindex $argv 1]
+
+spawn qemu-system-x86_64 -nographic -enable-kvm -m 4G -smp 4 \
+    -bios /usr/share/edk2-ovmf/x64/OVMF.4m.fd \
+    -drive file=$iso,media=cdrom,readonly=on \
+    -drive file=$disk,if=virtio,format=qcow2 \
+    -netdev user,id=n0 -device virtio-net,netdev=n0 \
+    -serial mon:stdio
+expect {
+    "NULLXES OS"     { puts "boot ok" }
+    timeout          { puts "boot TIMEOUT"; exit 1 }
+}
+expect {
+    "FRAME compositor starting"  { puts "frame starting"; exit 0 }
+    "session opened for user"    { puts "session ok"; exit 0 }
+    timeout                      { puts "session TIMEOUT"; exit 1 }
+}

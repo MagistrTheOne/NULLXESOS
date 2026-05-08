@@ -1,0 +1,11 @@
+NAME="NULLXES OS"
+PRETTY_NAME="NULLXES OS"
+ID=nullxes
+ID_LIKE=arch
+BUILD_ID=live
+VERSION_ID=0.1.0
+ANSI_COLOR="0;37"
+HOME_URL="https://nullxes.os/"
+SUPPORT_URL="https://nullxes.os/support/"
+BUG_REPORT_URL="https://github.com/nullxes/vendeta/issues"
+LOGO=nullxes

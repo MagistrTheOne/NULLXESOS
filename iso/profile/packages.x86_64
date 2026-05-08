@@ -1,0 +1,73 @@
+# Live ISO package list for NULLXES.
+# Built on top of the upstream `releng` archiso profile.
+
+# Base.
+base
+linux-lts
+linux-firmware
+intel-ucode
+amd-ucode
+mkinitcpio
+mkinitcpio-archiso
+syslinux
+edk2-shell
+efibootmgr
+
+# Filesystem + boot.
+btrfs-progs
+e2fsprogs
+exfatprogs
+ntfs-3g
+dosfstools
+gdisk
+parted
+
+# Networking.
+networkmanager
+iwd
+openssh
+nss-mdns
+avahi
+wpa_supplicant
+
+# Audio.
+pipewire
+pipewire-pulse
+pipewire-jack
+wireplumber
+
+# Wayland stack.
+xorg-xwayland
+libinput
+libxkbcommon
+mesa
+vulkan-icd-loader
+vulkan-intel
+vulkan-mesa-layers
+vulkan-radeon
+
+# NULLXES desktop meta.
+nullxes-keyring
+nullxes-base
+nullxes-desktop
+
+# Installer.
+calamares
+calamares-config-nullxes
+archinstall
+
+# Diagnostics.
+htop
+btop
+strace
+ltrace
+gdb
+lsof
+tmux
+vim
+nano
+git
+curl
+wget
+zsh
+bash-completion

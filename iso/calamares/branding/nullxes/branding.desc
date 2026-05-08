@@ -1,0 +1,34 @@
+---
+componentName: nullxes
+welcomeStyleCalamares: true
+welcomeExpandingLogo: true
+windowExpanding: normal
+windowSize: 920px,640px
+windowPlacement: center
+
+strings:
+    productName:           NULLXES OS
+    shortProductName:      NULLXES
+    version:               0.1.0
+    shortVersion:          0.1
+    versionedName:         NULLXES OS 0.1.0
+    shortVersionedName:    NULLXES 0.1
+    bootloaderEntryName:   NULLXES OS
+    productUrl:            https://nullxes.os/
+    supportUrl:            https://nullxes.os/support/
+    knownIssuesUrl:        https://nullxes.os/known-issues/
+    releaseNotesUrl:       https://nullxes.os/release-notes/
+    donateUrl:             ""
+
+images:
+    productLogo:         logo.png
+    productIcon:         logo.png
+    productWelcome:      welcome.png
+
+style:
+   sidebarBackground:    "#0A0A0A"
+   sidebarText:          "#E8E8E8"
+   sidebarTextSelect:    "#0A0A0A"
+   sidebarTextHighlight: "#C0C0C0"
+
+slideshow: "show.qml"

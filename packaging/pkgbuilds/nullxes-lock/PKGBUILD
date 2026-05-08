@@ -1,0 +1,25 @@
+pkgname=nullxes-lock
+pkgver=0.1.0
+pkgrel=1
+pkgdesc='NULLXES OS session-lock client (ext-session-lock-v1 + PAM)'
+arch=('x86_64')
+url='https://github.com/nullxes/vendeta'
+license=('MIT')
+depends=('glibc' 'wayland' 'libxkbcommon' 'pam' 'nullxes-fonts')
+makedepends=('rust' 'cargo' 'pkgconf' 'wayland-protocols')
+options=('!debug' '!lto')
+source=("nullxes-lock-${pkgver}.tar.zst::file://${PWD}/source.tar.zst")
+b2sums=('SKIP')
+
+build() {
+  export CARGO_HOME="${srcdir}/cargo-home"
+  export RUSTFLAGS="-C codegen-units=1 -C debuginfo=0"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  cargo build --release --frozen --bin nullxes-lock
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  install -Dm755 target/release/nullxes-lock "${pkgdir}/usr/bin/nullxes-lock"
+  install -Dm644 packaging/pam/nullxes-lock "${pkgdir}/etc/pam.d/nullxes-lock"
+}

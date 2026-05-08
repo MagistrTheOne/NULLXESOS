@@ -1,0 +1,12 @@
+# mkinitcpio preset for the linux-lts kernel on NULLXES.
+# Installed at /etc/mkinitcpio.d/linux-lts.preset.
+
+ALL_kver="/boot/vmlinuz-linux-lts"
+
+PRESETS=('default' 'fallback')
+
+default_image="/boot/initramfs-linux-lts.img"
+default_options=""
+
+fallback_image="/boot/initramfs-linux-lts-fallback.img"
+fallback_options="-S autodetect"

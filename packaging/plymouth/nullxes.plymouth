@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=NULLXES
+Description=Minimalist boot splash for NULLXES OS
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/nullxes
+ScriptFile=/usr/share/plymouth/themes/nullxes/nullxes.script

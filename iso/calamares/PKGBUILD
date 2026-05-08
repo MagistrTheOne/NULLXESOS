@@ -1,0 +1,26 @@
+pkgname=calamares-config-nullxes
+pkgver=0.1.0
+pkgrel=1
+pkgdesc='NULLXES OS Calamares installer configuration + branding'
+arch=('any')
+url='https://github.com/nullxes/vendeta'
+license=('MIT')
+depends=('calamares')
+source=("calamares-config-nullxes-${pkgver}.tar.zst::file://${PWD}/source.tar.zst")
+b2sums=('SKIP')
+
+package() {
+  cd "${srcdir}"
+  install -Dm644 settings.conf                                "${pkgdir}/etc/calamares/settings.conf"
+  install -Dm644 branding/nullxes/branding.desc               "${pkgdir}/etc/calamares/branding/nullxes/branding.desc"
+  install -Dm644 branding/nullxes/show.qml                    "${pkgdir}/etc/calamares/branding/nullxes/show.qml"
+  install -Dm644 modules/partition.conf                       "${pkgdir}/etc/calamares/modules/partition.conf"
+  install -Dm644 modules/bootloader.conf                      "${pkgdir}/etc/calamares/modules/bootloader.conf"
+  install -Dm644 modules/users.conf                           "${pkgdir}/etc/calamares/modules/users.conf"
+  install -Dm644 modules/displaymanager.conf                  "${pkgdir}/etc/calamares/modules/displaymanager.conf"
+  install -Dm644 modules/services-systemd.conf                "${pkgdir}/etc/calamares/modules/services-systemd.conf"
+  install -Dm644 modules/plymouthcfg.conf                     "${pkgdir}/etc/calamares/modules/plymouthcfg.conf"
+  install -Dm644 modules/initcpiocfg.conf                     "${pkgdir}/etc/calamares/modules/initcpiocfg.conf"
+  install -Dm644 modules/shellprocess.conf                    "${pkgdir}/etc/calamares/modules/shellprocess.conf"
+  install -Dm644 modules/fstab.conf                           "${pkgdir}/etc/calamares/modules/fstab.conf"
+}

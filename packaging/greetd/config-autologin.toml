@@ -1,0 +1,9 @@
+# Auto-login config used on the live ISO so the user lands directly in FRAME
+# without entering a password. Replaced post-install by the standard config.
+
+[terminal]
+vt = "next"
+
+[default_session]
+command = "/usr/bin/frame"
+user    = "liveuser"

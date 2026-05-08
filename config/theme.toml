@@ -1,0 +1,12 @@
+# NULLXES OS Theme
+# Only the accent colour is user-configurable.
+# All other palette values are fixed.
+#
+# Examples:
+#   C0C0C0  — Platinum (default)
+#   5B7FA6  — Steel Blue
+#   7A8A6E  — Sage
+#   8A7A6E  — Warm Copper
+#   6E7A8A  — Slate
+
+accent_hex = "C0C0C0"

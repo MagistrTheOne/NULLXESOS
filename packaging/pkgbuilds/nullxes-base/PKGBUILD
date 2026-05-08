@@ -1,0 +1,46 @@
+pkgname=nullxes-base
+pkgver=0.1.0
+pkgrel=1
+pkgdesc='NULLXES OS base meta-package — kernel, systemd, services'
+arch=('any')
+url='https://github.com/nullxes/vendeta'
+license=('MIT')
+depends=(
+  'base'
+  'linux-lts'
+  'linux-firmware'
+  'systemd'
+  'systemd-sysvcompat'
+  'networkmanager'
+  'pipewire'
+  'pipewire-pulse'
+  'pipewire-jack'
+  'wireplumber'
+  'libpulse'
+  'greetd'
+  'plymouth'
+  'efibootmgr'
+  'btrfs-progs'
+  'snapper'
+  'snap-pac'
+  'sudo'
+  'polkit'
+  'dbus-broker'
+  'pacman-contrib'
+  'reflector'
+  'nullxes-keyring'
+)
+optdepends=(
+  'intel-ucode: Intel CPU microcode'
+  'amd-ucode: AMD CPU microcode'
+  'bluez: Bluetooth support'
+  'bluez-utils: Bluetooth tools'
+)
+
+package() {
+  install -Dm644 packaging/sysctl/99-nullxes.conf "${pkgdir}/etc/sysctl.d/99-nullxes.conf"
+  install -Dm644 packaging/security/49-nullxes-rt.conf "${pkgdir}/etc/security/limits.d/49-nullxes-rt.conf"
+  install -Dm644 packaging/polkit/50-nullxes-nm.rules "${pkgdir}/usr/share/polkit-1/rules.d/50-nullxes-nm.rules"
+  install -Dm644 packaging/mkinitcpio/mkinitcpio.conf "${pkgdir}/etc/mkinitcpio.conf"
+  install -Dm644 packaging/mkinitcpio/nullxes.preset "${pkgdir}/etc/mkinitcpio.d/linux-lts.preset"
+}

@@ -1,0 +1,7 @@
+; xdg-desktop-portal Stage 1 backend descriptor for NULLXES.
+; Installed at /usr/share/xdg-desktop-portal/portals/nullxes.portal
+
+[portal]
+DBusName=org.freedesktop.impl.portal.desktop.wlr
+Interfaces=org.freedesktop.impl.portal.ScreenCast;org.freedesktop.impl.portal.Screenshot;
+UseIn=nullxes

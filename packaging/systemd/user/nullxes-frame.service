@@ -1,0 +1,19 @@
+[Unit]
+Description=NULLXES FRAME compositor (user session target)
+PartOf=graphical-session.target
+ConditionEnvironment=XDG_SESSION_TYPE=wayland
+
+[Service]
+Type=notify
+NotifyAccess=main
+ExecStart=/usr/bin/frame
+WatchdogSec=10s
+Restart=on-failure
+RestartSec=2s
+TimeoutStopSec=15s
+Environment=NULLXES_BACKEND=drm
+Environment=XDG_CURRENT_DESKTOP=nullxes
+Environment=NULLXES_LOG=info
+
+[Install]
+WantedBy=graphical-session.target

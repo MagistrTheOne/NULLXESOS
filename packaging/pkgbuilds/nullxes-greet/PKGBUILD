@@ -1,0 +1,26 @@
+pkgname=nullxes-greet
+pkgver=0.1.0
+pkgrel=1
+pkgdesc='NULLXES OS greeter (greetd protocol over wayland)'
+arch=('x86_64')
+url='https://github.com/nullxes/vendeta'
+license=('MIT')
+depends=('glibc' 'wayland' 'libxkbcommon' 'greetd' 'nullxes-fonts')
+makedepends=('rust' 'cargo' 'pkgconf' 'wayland-protocols')
+options=('!debug' '!lto')
+source=("nullxes-greet-${pkgver}.tar.zst::file://${PWD}/source.tar.zst")
+b2sums=('SKIP')
+
+build() {
+  export CARGO_HOME="${srcdir}/cargo-home"
+  export RUSTFLAGS="-C codegen-units=1 -C debuginfo=0"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  cargo build --release --frozen --bin nullxes-greet
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  install -Dm755 target/release/nullxes-greet "${pkgdir}/usr/bin/nullxes-greet"
+  install -Dm644 packaging/greetd/config.toml "${pkgdir}/etc/greetd/config.toml"
+  install -Dm644 packaging/greetd/config-autologin.toml "${pkgdir}/etc/greetd/config-autologin.toml"
+}

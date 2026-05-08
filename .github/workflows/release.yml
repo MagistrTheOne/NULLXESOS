@@ -1,0 +1,55 @@
+name: Release
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  release:
+    name: tag release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    container:
+      image: archlinux:latest
+      options: --privileged
+    steps:
+      - name: install deps
+        run: |
+          pacman -Syu --noconfirm
+          pacman -S --noconfirm --needed \
+            base-devel rust cargo git archiso gnupg
+
+      - uses: actions/checkout@v4
+
+      - name: import signing key
+        env:
+          NULLXES_GPG_KEY: ${{ secrets.NULLXES_GPG_KEY }}
+        run: |
+          if [[ -z "$NULLXES_GPG_KEY" ]]; then
+            echo "::warning::NULLXES_GPG_KEY missing — building unsigned"
+          else
+            echo "$NULLXES_GPG_KEY" | gpg --import
+          fi
+
+      - name: SOURCE_DATE_EPOCH
+        run: echo "SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)" >> "$GITHUB_ENV"
+
+      - name: build ISO
+        run: ./iso/scripts/build-iso.sh
+
+      - name: sign artifacts
+        run: |
+          for f in iso/out/*.iso; do
+            sha256sum "$f" > "${f}.sha256"
+            if gpg --list-secret-keys >/dev/null 2>&1; then
+              gpg --batch --yes --detach-sign --armor "$f"
+            fi
+          done
+
+      - name: create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            iso/out/*.iso
+            iso/out/*.sha256
+            iso/out/*.asc

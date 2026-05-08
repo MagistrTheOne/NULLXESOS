@@ -1,0 +1,33 @@
+[package]
+name        = "theme"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "NULLXES design tokens (colour, spacing, motion, typography) + theme::export CLI."
+
+[features]
+# Pull in fontdue and expose the text renderer module.
+render = ["dep:fontdue"]
+# Build the `theme-export` CLI binary (consumed by PKGBUILDs).
+cli    = ["dep:clap", "dep:image", "dep:tiny-skia"]
+
+[lib]
+name = "theme"
+path = "src/lib.rs"
+
+[[bin]]
+name = "theme-export"
+path = "src/bin/theme_export.rs"
+required-features = ["cli"]
+
+[dependencies]
+serde     = { workspace = true }
+toml      = { workspace = true }
+anyhow    = { workspace = true }
+fontdue   = { version = "0.9", optional = true }
+clap      = { version = "4", features = ["derive"], optional = true }
+image     = { workspace = true, optional = true }
+tiny-skia = { workspace = true, optional = true }
+
+[lints]
+workspace = true

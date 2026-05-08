@@ -1,0 +1,90 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: build & test (arch container)
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+    steps:
+      - name: install deps
+        run: |
+          pacman -Syu --noconfirm
+          pacman -S --noconfirm --needed \
+            base-devel rust cargo pkgconf git \
+            libxkbcommon wayland wayland-protocols \
+            libinput libseat libdrm mesa libgbm \
+            pipewire dbus pam fontconfig
+      - uses: actions/checkout@v4
+
+      - name: cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: cargo build
+        env:
+          RUSTFLAGS: "-C codegen-units=1"
+        run: cargo build --workspace --release --locked
+
+      - name: cargo clippy
+        run: cargo clippy --workspace --all-targets -- -D warnings
+
+      - name: cargo test
+        run: cargo test --workspace --locked
+
+      - name: xtask check-theme
+        run: cargo run --release --bin xtask -- check-theme
+
+  iso:
+    name: build ISO
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: github.event_name == 'push'
+    container:
+      image: archlinux:latest
+      options: --privileged
+    steps:
+      - name: install deps
+        run: |
+          pacman -Syu --noconfirm
+          pacman -S --noconfirm --needed \
+            base-devel rust cargo git archiso edk2-ovmf \
+            qemu-system-x86 expect
+
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+
+      - name: SOURCE_DATE_EPOCH from git
+        run: echo "SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)" >> "$GITHUB_ENV"
+
+      - name: stage local repo
+        run: |
+          mkdir -p /srv/nullxes-repo/x86_64
+          # Real release: build every PKGBUILD under packaging/pkgbuilds/ and
+          # repo-add into /srv/nullxes-repo. CI exercises this offline.
+          repo-add /srv/nullxes-repo/x86_64/nullxes.db.tar.gz || true
+
+      - name: build ISO
+        run: ./iso/scripts/build-iso.sh
+
+      - name: smoke test in QEMU
+        run: |
+          qemu-img create -f qcow2 /tmp/disk.qcow2 16G
+          ISO_PATH=$(ls iso/out/*.iso | head -n 1)
+          ./iso/scripts/smoke.expect "$ISO_PATH" /tmp/disk.qcow2
+
+      - name: upload ISO artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nullxes-iso
+          path: iso/out/*.iso

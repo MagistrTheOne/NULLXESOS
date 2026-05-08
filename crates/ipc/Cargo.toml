@@ -1,0 +1,25 @@
+[package]
+name        = "ipc"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "NULLXES Control IPC v1 — versioned JSON-lines protocol between FRAME compositor and userland tooling."
+
+[dependencies]
+serde      = { workspace = true }
+serde_json = { workspace = true }
+thiserror  = { workspace = true }
+tracing    = { workspace = true }
+libc       = { workspace = true }
+
+[features]
+default = []
+# Enable the async client implementation (depends on tokio).
+client = ["dep:tokio"]
+
+[dependencies.tokio]
+workspace = true
+optional = true
+
+[lints]
+workspace = true

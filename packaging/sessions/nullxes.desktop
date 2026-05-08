@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=NULLXES
+Comment=NULLXES OS Wayland session
+Exec=/usr/bin/frame
+TryExec=/usr/bin/frame
+Type=Application
+DesktopNames=nullxes

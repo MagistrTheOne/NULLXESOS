@@ -1,0 +1,14 @@
+[Unit]
+Description=NULLXES notification daemon
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=dbus
+BusName=org.freedesktop.Notifications
+ExecStart=/usr/bin/nullxes-notif
+Restart=on-failure
+RestartSec=2s
+
+[Install]
+WantedBy=graphical-session.target

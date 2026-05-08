@@ -1,0 +1,42 @@
+pkgname=nullxes-theme
+pkgver=0.1.0
+pkgrel=1
+pkgdesc='NULLXES OS branding (GTK 3/4, Qt6, Plymouth, systemd-boot, greetd, icons)'
+arch=('any')
+url='https://github.com/nullxes/vendeta'
+license=('MIT')
+depends=('plymouth')
+makedepends=('rust' 'cargo' 'pkgconf')
+options=('!debug' '!lto')
+source=("nullxes-theme-${pkgver}.tar.zst::file://${PWD}/source.tar.zst")
+b2sums=('SKIP')
+
+build() {
+  export CARGO_HOME="${srcdir}/cargo-home"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  cargo build --release --frozen --features cli --bin theme-export
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  install -Dm644 /dev/stdin "${pkgdir}/etc/nullxes/theme.toml" <<'TOML'
+# NULLXES default accent — platinum.
+accent_hex = "C0C0C0"
+TOML
+
+  # Run theme-export against the system theme.toml. Outputs are deterministic
+  # so this is reproducible.
+  ./target/release/theme-export --theme "${pkgdir}/etc/nullxes/theme.toml" \
+    gtk         --out "${pkgdir}/usr/share/themes/NULLXES/"
+  ./target/release/theme-export --theme "${pkgdir}/etc/nullxes/theme.toml" \
+    qt6         --out "${pkgdir}/usr/share/qt6ct/colors/"
+  ./target/release/theme-export --theme "${pkgdir}/etc/nullxes/theme.toml" \
+    plymouth    --out "${pkgdir}/usr/share/plymouth/themes/nullxes/"
+  ./target/release/theme-export --theme "${pkgdir}/etc/nullxes/theme.toml" \
+    systemd-boot --out "${pkgdir}/usr/share/nullxes-systemd-boot/"
+  ./target/release/theme-export --theme "${pkgdir}/etc/nullxes/theme.toml" \
+    greetd      --out "${pkgdir}/usr/share/nullxes-greet/"
+  ./target/release/theme-export --theme "${pkgdir}/etc/nullxes/theme.toml" \
+    icons       --out "${pkgdir}/usr/share/icons/NULLXES/"
+}

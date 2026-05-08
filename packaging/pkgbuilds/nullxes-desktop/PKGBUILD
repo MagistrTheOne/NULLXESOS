@@ -1,0 +1,39 @@
+pkgname=nullxes-desktop
+pkgver=0.1.0
+pkgrel=1
+pkgdesc='NULLXES OS desktop meta-package'
+arch=('any')
+url='https://github.com/nullxes/vendeta'
+license=('MIT')
+depends=(
+  'nullxes-base'
+  'nullxes-frame'
+  'nullxes-launcher'
+  'nullxes-slate'
+  'nullxes-lock'
+  'nullxes-notif'
+  'nullxes-settings'
+  'nullxes-greet'
+  'nullxes-theme'
+  'nullxes-fonts'
+  'nullxes-icons'
+  'nullxes-cursors'
+  'xdg-desktop-portal-wlr'
+  'xdg-desktop-portal-gtk'
+  'xorg-xwayland'
+)
+
+package() {
+  install -Dm644 packaging/portal/nullxes-portals.conf \
+    "${pkgdir}/usr/share/xdg-desktop-portal/nullxes-portals.conf"
+  install -Dm644 packaging/portal/nullxes.portal \
+    "${pkgdir}/usr/share/xdg-desktop-portal/portals/nullxes.portal"
+  install -Dm644 packaging/portal/nullxes-portal-wlr.conf \
+    "${pkgdir}/etc/xdg/xdg-desktop-portal-wlr/config"
+  install -Dm644 packaging/loader/loader.conf \
+    "${pkgdir}/usr/share/nullxes-systemd-boot/loader.conf"
+  install -Dm644 packaging/loader/entries/nullxes.conf \
+    "${pkgdir}/usr/share/nullxes-systemd-boot/entries/nullxes.conf"
+  install -Dm644 packaging/loader/entries/nullxes-fallback.conf \
+    "${pkgdir}/usr/share/nullxes-systemd-boot/entries/nullxes-fallback.conf"
+}

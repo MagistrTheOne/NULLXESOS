@@ -1,0 +1,18 @@
+# FRAME compositor configuration
+# Copy to ~/.config/nullxes/frame.toml to override defaults.
+
+[compositor]
+xwayland   = true
+target_fps = 0      # 0 = follow display EDID
+vrr        = true   # Variable Refresh Rate if supported
+
+[input]
+natural_scroll = true
+tap_to_click   = true
+pointer_accel  = 0.0   # -1.0 to 1.0
+repeat_delay   = 400   # ms before key repeat starts
+repeat_rate    = 30    # key repeat chars/sec
+
+[workspace]
+count = 9
+wrap  = false
