@@ -1,0 +1,21 @@
+# Rust / Cargo
+/target/
+**/*.rs.bk
+
+# Local env / secrets
+.env
+.env.*
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor swap / backup
+*.swp
+*.swo
+*~
+*.tmp
+*.temp
+.tmp/
+temp/

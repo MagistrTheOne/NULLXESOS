@@ -39,8 +39,12 @@ tokio        = { workspace = true }
 zbus         = { workspace = true }
 futures-util = { workspace = true }
 
-# Used by the in-process panel modules.
-pipewire = { workspace = true }
+# PipeWire stack: explicit workspace deps so libspa-sys ^0 cannot float to 0.8 (jammy ABI).
+# v0_3_45 enables API up through 0.3.45 chain (safe for jammy libpipewire 0.3.48).
+pipewire     = { workspace = true, features = ["v0_3_45"] }
+libspa       = { workspace = true }
+libspa-sys   = { workspace = true }
+pipewire-sys = { workspace = true }
 
 [features]
 default = ["winit", "drm"]

@@ -96,8 +96,13 @@ pam-sys = "1"
 # ── Terminal ─────────────────────────────────────────────────────────────────
 alacritty_terminal = "0.21"
 
-# ── PipeWire ─────────────────────────────────────────────────────────────────
-pipewire = "0.8"
+# ── PipeWire (pin entire stack for Ubuntu 22.04: libpipewire/libspa 0.3.48) ──
+# pipewire 0.8 + libspa 0.8 target newer SPA structs (e.g. spa_video_info_raw.flags)
+# than jammy headers. These crates use libspa-sys ^0, which otherwise resolves to 0.8.
+pipewire     = "=0.7.2"
+libspa       = "=0.7.2"
+libspa-sys   = "=0.7.2"
+pipewire-sys = "=0.7.2"
 
 # ── greetd IPC ───────────────────────────────────────────────────────────────
 greetd_ipc = "0.10"
